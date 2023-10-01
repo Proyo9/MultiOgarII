@@ -146,7 +146,7 @@ class Server {
         var req = req || ws.upgradeReq;
         var logip = ws._socket.remoteAddress + ":" + ws._socket.remotePort;
         ws.on('error', function (err) {
-            Logger.writeError("[" + logip + "] " + err.stack);
+            Logger.error("[" + logip + "] " + err.stack);
         });
         if (this.config.serverMaxConnections && this.socketCount >= this.config.serverMaxConnections) {
             ws.close(1000, "No slots");
@@ -986,13 +986,13 @@ function trackerRequest(options, type, body) {
     options.headers['content-length'] = body == null ? 0 : Buffer.byteLength(body, 'utf8');
     var req = http.request(options, function (res) {
         if (res.statusCode != 200) {
-            Logger.writeError("[Tracker][" + options.host + "]: statusCode = " + res.statusCode);
+            Logger.error("[Tracker][" + options.host + "]: statusCode = " + res.statusCode);
             return;
         }
         res.setEncoding('utf8');
     });
     req.on('error', function (err) {
-        Logger.writeError("[Tracker][" + options.host + "]: " + err);
+        Logger.error("[Tracker][" + options.host + "]: " + err);
     });
     req.shouldKeepAlive = false;
     req.on('close', function () {
